@@ -1,9 +1,8 @@
-import { IUserService, UserDocument } from "../../../models/userModel";
-
+import { IUser } from "../../../models/user/IUser";
+import { IUserService } from "../../../models/user/IUserService";
 export class FakeUserService implements IUserService {
-    private fakeUsers: UserDocument[];
-
-    constructor(fakeUsers: UserDocument[] = []) {
+    private fakeUsers: IUser[];
+    constructor(fakeUsers: IUser[] = []) {
         this.fakeUsers = fakeUsers;
     }
     public async authenticateUser(username: string, password: string): Promise<boolean> {
@@ -15,14 +14,14 @@ export class FakeUserService implements IUserService {
         return false;
     }
 
-    public async getUserByUsername(username: string): Promise<UserDocument | null> {
+    public async getUserByUsername(username: string): Promise<IUser | null> {
         return this.fakeUsers.find((user) => user.username === username) || null;
     }
 
-    public async createUser(email: string, username: string, password: string): Promise<UserDocument> {
+    public async createUser(email: string, username: string, password: string): Promise<IUser> {
         const user = { email, username, password };
-        this.fakeUsers.push(user as UserDocument);
-        return user as UserDocument;
+        this.fakeUsers.push(user as IUser);
+        return user as IUser;
     }
 
     public async deleteUser(username: string): Promise<void> {
@@ -32,7 +31,7 @@ export class FakeUserService implements IUserService {
         }
     }
 
-    public async updateUser(username: string, password: string): Promise<UserDocument | null> {
+    public async updateUser(username: string, password: string): Promise<IUser | null> {
         const userIndex = this.fakeUsers.findIndex((user) => user.username === username);
         if (userIndex !== -1) {
             this.fakeUsers[userIndex].password = password;

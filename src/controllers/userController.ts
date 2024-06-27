@@ -1,8 +1,10 @@
-import { Controller, Post, Route, Request, Response, Body, Get, Path, Security } from 'tsoa';
+import { Controller, Post, Route, Response, Body, Get, Path } from 'tsoa';
 import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../utils/responseUtils';
-import { IUser, UserLoginRequest, UserLoginResponse, UserRegisterRequest } from '../models/userModel';
 import { isEmptyOrNull } from '../helpers/isEmpty';
 import { getUserService } from '../config/serviceFactory';
+import { UserLoginRequest, UserRegisterRequest } from '../models/requests/UserRequests';
+import { UserLoginResponse } from '../models/responses/UserResponses';
+import { UserDto } from '../models/user/UserDto';
 
 const userService = getUserService();
 
@@ -23,7 +25,7 @@ export class UserController extends Controller {
             this.setStatus(200);
             return createSuccessResponse({
                 message: 'Login successful',
-                token:"this is a test token"
+                token: "this is a test token"
             });
         } else {
             this.setStatus(401);
@@ -56,11 +58,11 @@ export class UserController extends Controller {
         this.setStatus(400);
         return createErrorResponse('Bad Request');
     }
-  
+
     @Get('/{username}')
     @Response(200, 'Success')
     @Response(401, 'Unauthorized')
-    public async userDetails(@Path() username: string): Promise<ApiSuccessResponse<IUser> | ApiErrorResponse> {
+    public async userDetails(@Path() username: string): Promise<ApiSuccessResponse<UserDto> | ApiErrorResponse> {
         if (!isEmptyOrNull(username)) {
             this.setStatus(401);
             return createErrorResponse('Please enter a valid username');
@@ -68,8 +70,12 @@ export class UserController extends Controller {
 
         const user = await userService.getUserByUsername(username);
         if (user) {
+            const userDto: UserDto = {
+                username: user.username,
+                email: user.email
+            }
             this.setStatus(200);
-            return createSuccessResponse(user);
+            return createSuccessResponse(userDto);
         }
         this.setStatus(401);
         return createErrorResponse('User not found');

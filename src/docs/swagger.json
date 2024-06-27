@@ -105,27 +105,23 @@
 				"type": "object",
 				"additionalProperties": true
 			},
-			"IUser": {
+			"UserDto": {
 				"properties": {
 					"email": {
 						"type": "string"
 					},
 					"username": {
 						"type": "string"
-					},
-					"password": {
-						"type": "string"
 					}
 				},
 				"required": [
 					"email",
-					"username",
-					"password"
+					"username"
 				],
 				"type": "object",
 				"additionalProperties": true
 			},
-			"ApiSuccessResponse_IUser_": {
+			"ApiSuccessResponse_UserDto_": {
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -135,7 +131,7 @@
 						"nullable": false
 					},
 					"data": {
-						"$ref": "#/components/schemas/IUser"
+						"$ref": "#/components/schemas/UserDto"
 					}
 				},
 				"required": [
@@ -249,7 +245,7 @@
 								"schema": {
 									"anyOf": [
 										{
-											"$ref": "#/components/schemas/ApiSuccessResponse_IUser_"
+											"$ref": "#/components/schemas/ApiSuccessResponse_UserDto_"
 										},
 										{
 											"$ref": "#/components/schemas/ApiErrorResponse"
