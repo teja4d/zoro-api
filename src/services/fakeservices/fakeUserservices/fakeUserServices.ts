@@ -1,8 +1,11 @@
-import { IUser, IUserService, UserDocument } from "../../../models/userModel";
-
-const fakeUsers: UserDocument[] = [];
+import { IUserService, UserDocument } from "../../../models/userModel";
 
 export class FakeUserService implements IUserService {
+    private fakeUsers: UserDocument[];
+
+    constructor(fakeUsers: UserDocument[] = []) {
+        this.fakeUsers = fakeUsers;
+    }
     public async authenticateUser(username: string, password: string): Promise<boolean> {
         const user = await this.getUserByUsername(username);
         if (!user) return false;
@@ -13,27 +16,27 @@ export class FakeUserService implements IUserService {
     }
 
     public async getUserByUsername(username: string): Promise<UserDocument | null> {
-        return fakeUsers.find((user) => user.username === username) || null;
+        return this.fakeUsers.find((user) => user.username === username) || null;
     }
 
     public async createUser(email: string, username: string, password: string): Promise<UserDocument> {
         const user = { email, username, password };
-        fakeUsers.push(user as UserDocument);
+        this.fakeUsers.push(user as UserDocument);
         return user as UserDocument;
     }
 
     public async deleteUser(username: string): Promise<void> {
-        const index = fakeUsers.findIndex((user) => user.username === username);
+        const index = this.fakeUsers.findIndex((user) => user.username === username);
         if (index !== -1) {
-            fakeUsers.splice(index, 1);
+            this.fakeUsers.splice(index, 1);
         }
     }
 
     public async updateUser(username: string, password: string): Promise<UserDocument | null> {
-        const userIndex = fakeUsers.findIndex((user) => user.username === username);
+        const userIndex = this.fakeUsers.findIndex((user) => user.username === username);
         if (userIndex !== -1) {
-            fakeUsers[userIndex].password = password;
-            return fakeUsers[userIndex];
+            this.fakeUsers[userIndex].password = password;
+            return this.fakeUsers[userIndex];
         }
         return null;
     }

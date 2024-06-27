@@ -2,9 +2,9 @@ import { Controller, Post, Route, Request, Response, Body, Get, Path, Security }
 import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../utils/responseUtils';
 import { IUser, UserLoginRequest, UserLoginResponse, UserRegisterRequest } from '../models/userModel';
 import { isEmptyOrNull } from '../helpers/isEmpty';
-import { UserService } from '../services/userservices/userService';
+import { getUserService } from '../config/serviceFactory';
 
-const userService = new UserService();
+const userService = getUserService();
 
 @Route('user')
 export class UserController extends Controller {
