@@ -1,6 +1,6 @@
 import { Controller, Post, Route, Request, Response, Body, Get, Path, Security } from 'tsoa';
 import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../utils/responseUtils';
-import { IUser, UserLoginRequest, UserRegisterRequest } from '../models/userModel';
+import { IUser, UserLoginRequest, UserLoginResponse, UserRegisterRequest } from '../models/userModel';
 import { isEmptyOrNull } from '../helpers/isEmpty';
 import { UserService } from '../services/userservices/userService';
 
@@ -12,7 +12,7 @@ export class UserController extends Controller {
     @Post('login')
     @Response(200, 'Success')
     @Response(401, 'Unauthorized')
-    public async login(@Body() req: UserLoginRequest): Promise<ApiErrorResponse | ApiSuccessResponse<string>> {
+    public async login(@Body() req: UserLoginRequest): Promise<ApiErrorResponse | ApiSuccessResponse<UserLoginResponse>> {
         const { username, password } = req;
 
         if (!isEmptyOrNull(username, password)) {
@@ -21,7 +21,10 @@ export class UserController extends Controller {
         }
         if (await userService.authenticateUser(username, password)) {
             this.setStatus(200);
-            return createSuccessResponse('Login successful');
+            return createSuccessResponse({
+                message: 'Login successful',
+                token:"this is a test token"
+            });
         } else {
             this.setStatus(401);
             return createErrorResponse('Authentication failed');

@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-
+import cors from 'cors';
 import swaggerUi from 'swagger-ui-express';
 import swaggerJson from './docs/swagger.json';
 import connectDB from './database/database';
@@ -11,6 +11,7 @@ const app = express();
 // Middleware
 app.use(bodyParser.json());
 //cors
+app.use(cors());
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE, PUT');

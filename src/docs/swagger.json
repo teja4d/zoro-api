@@ -34,7 +34,23 @@
 				"type": "object",
 				"additionalProperties": true
 			},
-			"ApiSuccessResponse_string_": {
+			"UserLoginResponse": {
+				"properties": {
+					"token": {
+						"type": "string"
+					},
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"token",
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"ApiSuccessResponse_UserLoginResponse_": {
 				"properties": {
 					"success": {
 						"type": "boolean",
@@ -44,7 +60,7 @@
 						"nullable": false
 					},
 					"data": {
-						"type": "string"
+						"$ref": "#/components/schemas/UserLoginResponse"
 					}
 				},
 				"required": [
@@ -154,7 +170,7 @@
 											"$ref": "#/components/schemas/ApiErrorResponse"
 										},
 										{
-											"$ref": "#/components/schemas/ApiSuccessResponse_string_"
+											"$ref": "#/components/schemas/ApiSuccessResponse_UserLoginResponse_"
 										}
 									]
 								}

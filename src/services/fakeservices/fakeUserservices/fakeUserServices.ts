@@ -25,7 +25,6 @@ export class FakeUserService implements IUserService {
     public async deleteUser(username: string): Promise<void> {
         const index = fakeUsers.findIndex((user) => user.username === username);
         if (index !== -1) {
-            console.log(fakeUsers)
             fakeUsers.splice(index, 1);
         }
     }
