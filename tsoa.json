@@ -1,0 +1,20 @@
+{
+    "spec": {
+        "entryFile": "./src/server.ts",
+        "outputDirectory": "./src/docs/",
+        "outputFile":"swagger.json",
+        "noImplicitAdditionalProperties": "throw-on-extras",
+        "specVersion": 3
+    },
+    "routes": {
+        "basePath": "/",
+        "entryFile": "./src/server.ts",
+        "routesDir": "./src/routes",
+        "middleware": [
+            "./src/middleware/**/*.ts"
+        ]
+    },
+    "controllerPathGlobs": [
+        "./src/controllers/*.ts"
+    ]
+}
