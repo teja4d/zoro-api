@@ -5,9 +5,9 @@ const SALT_ROUNDS = 10;
 export class UserService implements IUserService {
     public authenticateUser = async (username: string, password: string) => {
         const user = await this.getUserByUsername(username);
-        if (!user) return null;
+        if (!user) return false;
         const isValidPassword = await bcrypt.compare(password, user.password);
-        return isValidPassword ? user : null;
+        return isValidPassword ? true : false;
     }
     public getUserByUsername = async (username: string): Promise<UserDocument | null> => {
         return User.findOne({ username });

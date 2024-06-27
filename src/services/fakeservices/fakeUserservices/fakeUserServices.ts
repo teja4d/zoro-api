@@ -3,13 +3,13 @@ import { IUser, IUserService, UserDocument } from "../../../models/userModel";
 const fakeUsers: UserDocument[] = [];
 
 export class FakeUserService implements IUserService {
-    public async authenticateUser(username: string, password: string): Promise<UserDocument| null> {
+    public async authenticateUser(username: string, password: string): Promise<boolean> {
         const user = await this.getUserByUsername(username);
-        if (!user) return null;
+        if (!user) return false;
         if (user.password === password) {
-            return user;
+            return true;
         }
-        return null;
+        return false;
     }
 
     public async getUserByUsername(username: string): Promise<UserDocument | null> {

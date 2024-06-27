@@ -19,7 +19,7 @@ describe('userService', () => {
             (User.findOne as jest.Mock).mockResolvedValueOnce(user);
             (bcrypt.compare as jest.Mock).mockResolvedValueOnce(true);
             const result = await userService.authenticateUser(username, password);
-            expect(result).toEqual(user);
+            expect(result).toBeTruthy();
             expect(User.findOne).toHaveBeenCalledWith({ username });
             expect(bcrypt.compare).toHaveBeenCalledWith(password, user.password);
         });
@@ -27,7 +27,7 @@ describe('userService', () => {
         it('should return null if the user does not exist', async () => {
             (User.findOne as jest.Mock).mockResolvedValueOnce(null);
             const result = await userService.authenticateUser(username, password);
-            expect(result).toBeNull();
+            expect(result).toBeFalsy();
         });
 
         it('should return null if the password is invalid', async () => {
@@ -41,7 +41,7 @@ describe('userService', () => {
 
             const result = await userService.authenticateUser(username, password);
 
-            expect(result).toBeNull();
+            expect(result).toBeFalsy();
             expect(User.findOne).toHaveBeenCalledWith({ username });
             expect(bcrypt.compare).toHaveBeenCalledWith(password, user.password);
         });

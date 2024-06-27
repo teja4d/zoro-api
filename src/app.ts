@@ -1,9 +1,10 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { RegisterRoutes } from './routes/routes';
+
 import swaggerUi from 'swagger-ui-express';
 import swaggerJson from './docs/swagger.json';
 import connectDB from './database/database';
+import { RegisterRoutes } from './routes/routes';
 
 const app = express();
 
@@ -28,6 +29,13 @@ app.get('/swagger.json', (req, res) => {
 // Routes
 RegisterRoutes(app);
 
+//missing routes
+app.use(function notFoundHandler(_req, res: express.Response) {
+    res.status(404).send({
+        message: "Not Found",
+    });
+});
+
 // Error handling middleware
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
     if (err.status) {
@@ -36,6 +44,8 @@ app.use((err: any, req: express.Request, res: express.Response, next: express.Ne
         res.status(500).json({ message: 'Internal Server Error' });
     }
 });
+
+
 
 //connect to database
 connectDB();

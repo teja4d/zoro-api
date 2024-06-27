@@ -7,7 +7,7 @@ export interface IUser {
 }
 
 export interface IUserService {
-    authenticateUser(username: string, password: string): Promise<UserDocument | null>;
+    authenticateUser(username: string, password: string): Promise<boolean>;
     getUserByUsername(username: string): Promise<UserDocument | null>;
     createUser(email: string, username: string, password: string): Promise<UserDocument>;
     deleteUser(username: string): Promise<void>;
@@ -27,6 +27,10 @@ export interface UserRegisterRequest {
     password: string;
 }
 
+export interface UserLoginResponse {
+    token: string;
+    message:string;
+}
 export interface UserDocument extends IUser, Document { };
 
 const userSchema: Schema = new Schema({
