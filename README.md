@@ -1,5 +1,5 @@
 # Zoro-API
-## API URL(Swagger) : http://localhost:3000/docs
+## API URL(Swagger) : http://localhost:5000/docs
 
 Zoro-API is an Express.js-based backend API project, utilizing TypeScript for type safety and TSOA for API documentation. This README outlines the project's structure, dependencies, and instructions for setting up and running the application.
 
