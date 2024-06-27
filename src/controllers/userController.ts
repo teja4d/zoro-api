@@ -53,7 +53,7 @@ export class UserController extends Controller {
         this.setStatus(400);
         return createErrorResponse('Bad Request');
     }
-    @Security('jwt')
+  
     @Get('/{username}')
     @Response(200, 'Success')
     @Response(401, 'Unauthorized')

@@ -140,7 +140,7 @@
 		"contact": {}
 	},
 	"paths": {
-		"/auth/login": {
+		"/user/login": {
 			"post": {
 				"operationId": "Login",
 				"responses": {
@@ -179,7 +179,7 @@
 				}
 			}
 		},
-		"/auth/register": {
+		"/user/register": {
 			"post": {
 				"operationId": "Register",
 				"responses": {
@@ -222,7 +222,7 @@
 				}
 			}
 		},
-		"/auth/user/{username}": {
+		"/user/{username}": {
 			"get": {
 				"operationId": "UserDetails",
 				"responses": {
