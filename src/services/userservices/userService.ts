@@ -1,4 +1,4 @@
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import User from '../../models/user/User';
 import { IUserService } from '../../models/user/IUserService';
 import { IUser } from '../../models/user/IUser';
