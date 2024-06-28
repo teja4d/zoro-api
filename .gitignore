@@ -16,3 +16,6 @@ yarn.lock
 
 # Operating System
 .DS_Store
+
+#build
+dist
