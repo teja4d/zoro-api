@@ -3,7 +3,7 @@ import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSucces
 import { isEmptyOrNull } from '../helpers/isEmpty';
 import { getUserService } from '../config/serviceFactory';
 import { UserLoginRequest, UserRegisterRequest } from '../models/requests/UserRequests';
-import { UserLoginResponse } from '../models/responses/UserResponses';
+import { UserLoginResponse, UserRegisterResponse } from '../models/responses/UserResponses';
 import { UserDto } from '../models/user/UserDto';
 
 const userService = getUserService();
@@ -36,7 +36,7 @@ export class UserController extends Controller {
     @Post('register')
     @Response(201, 'Success', 'User registered successfully')
     @Response(400, 'Bad Request')
-    public async register(@Body() req: UserRegisterRequest): Promise<ApiErrorResponse | object> {
+    public async register(@Body() req: UserRegisterRequest): Promise<ApiErrorResponse | ApiSuccessResponse<UserRegisterResponse>> {
         const { email, username, password } = req;
 
         if (!isEmptyOrNull(email, username, password)) {
@@ -53,7 +53,7 @@ export class UserController extends Controller {
         const user = await userService.createUser(email, username, password);
         if (user) {
             this.setStatus(201);
-            return createSuccessResponse({ message: 'User registered successfully' });
+            return createSuccessResponse({ message: 'User registered successfully'});
         }
         this.setStatus(400);
         return createErrorResponse('Bad Request');

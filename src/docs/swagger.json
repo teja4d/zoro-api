@@ -85,6 +85,37 @@
 				"type": "object",
 				"additionalProperties": true
 			},
+			"UserRegisterResponse": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
+			"ApiSuccessResponse_UserRegisterResponse_": {
+				"properties": {
+					"success": {
+						"type": "boolean",
+						"enum": [
+							true
+						],
+						"nullable": false
+					},
+					"data": {
+						"$ref": "#/components/schemas/UserRegisterResponse"
+					}
+				},
+				"required": [
+					"success"
+				],
+				"type": "object",
+				"additionalProperties": true
+			},
 			"UserRegisterRequest": {
 				"properties": {
 					"email": {
@@ -205,8 +236,7 @@
 											"$ref": "#/components/schemas/ApiErrorResponse"
 										},
 										{
-											"additionalProperties": true,
-											"type": "object"
+											"$ref": "#/components/schemas/ApiSuccessResponse_UserRegisterResponse_"
 										}
 									]
 								}
