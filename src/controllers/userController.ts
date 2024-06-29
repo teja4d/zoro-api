@@ -1,21 +1,24 @@
 import { Controller, Post, Route, Response, Body, Get, Path, Inject } from 'tsoa';
 import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../utils/responseUtils';
 import { isEmptyOrNull } from '../helpers/isEmpty';
-import getUserService from '../config/serviceFactory';
 import { UserLoginRequest, UserRegisterRequest } from '../models/requests/UserRequests';
 import { UserLoginResponse, UserRegisterResponse } from '../models/responses/UserResponses';
 import { UserDto } from '../models/user/UserDto';
 import { IUserService } from '../models/user/IUserService';
+import { UserService } from '../services/userservices/userService';
 
-interface UserControllerDependencies {
-    userService: IUserService;
+export interface UserControllerDependencies {
+    userService?: IUserService;
 }
 
 @Route('user')
 export class UserController extends Controller {
     private readonly userService: IUserService;
-    constructor({ userService }: UserControllerDependencies) {
+    constructor({ userService }: UserControllerDependencies = {}) {
         super();
+        if (!userService) {
+            throw new Error('UserController requires userService');
+        }
         this.userService = userService;
     }
 
