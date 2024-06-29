@@ -3,7 +3,7 @@ import { IUserService } from "../models/user/IUserService";
 import { FakeUserService } from "../services/fakeservices/fakeUserservices/fakeUserServices";
 import { UserService } from "../services/userservices/userService";
 
-export function getUserService(): IUserService {
+export default function getUserService(): IUserService {
     const useFake = process.env.USE_FAKE_SERVICES === "true";
     const fakesData = [{ username: "testuser", password: "testpassword", email: "test@gmail.com" }] as IUser[]
     if (useFake) {

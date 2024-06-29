@@ -1,15 +1,23 @@
-import { Controller, Post, Route, Response, Body, Get, Path } from 'tsoa';
+import { Controller, Post, Route, Response, Body, Get, Path, Inject } from 'tsoa';
 import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../utils/responseUtils';
 import { isEmptyOrNull } from '../helpers/isEmpty';
-import { getUserService } from '../config/serviceFactory';
+import getUserService from '../config/serviceFactory';
 import { UserLoginRequest, UserRegisterRequest } from '../models/requests/UserRequests';
 import { UserLoginResponse, UserRegisterResponse } from '../models/responses/UserResponses';
 import { UserDto } from '../models/user/UserDto';
+import { IUserService } from '../models/user/IUserService';
 
-const userService = getUserService();
+interface UserControllerDependencies {
+    userService: IUserService;
+}
 
 @Route('user')
 export class UserController extends Controller {
+    private readonly userService: IUserService;
+    constructor({ userService }: UserControllerDependencies) {
+        super();
+        this.userService = userService;
+    }
 
     @Post('login')
     @Response(200, 'Success')
@@ -21,7 +29,7 @@ export class UserController extends Controller {
             this.setStatus(401);
             return createErrorResponse('Unauthorized');
         }
-        if (await userService.authenticateUser(username, password)) {
+        if (await this.userService.authenticateUser(username, password)) {
             this.setStatus(200);
             return createSuccessResponse({
                 message: 'Login successful',
@@ -44,16 +52,16 @@ export class UserController extends Controller {
             return createErrorResponse('Bad Request');
         };
 
-        const existingUser = await userService.getUserByUsername(username);
+        const existingUser = await this.userService.getUserByUsername(username);
         if (existingUser) {
             this.setStatus(400);
             return createErrorResponse('Username already taken');
         }
 
-        const user = await userService.createUser(email, username, password);
+        const user = await this.userService.createUser(email, username, password);
         if (user) {
             this.setStatus(201);
-            return createSuccessResponse({ message: 'User registered successfully'});
+            return createSuccessResponse({ message: 'User registered successfully' });
         }
         this.setStatus(400);
         return createErrorResponse('Bad Request');
@@ -68,7 +76,7 @@ export class UserController extends Controller {
             return createErrorResponse('Please enter a valid username');
         };
 
-        const user = await userService.getUserByUsername(username);
+        const user = await this.userService.getUserByUsername(username);
         if (user) {
             const userDto: UserDto = {
                 username: user.username,

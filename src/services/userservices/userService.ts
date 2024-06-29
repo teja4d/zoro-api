@@ -5,6 +5,7 @@ import { IUser } from '../../models/user/IUser';
 
 const SALT_ROUNDS = 10;
 export class UserService implements IUserService {
+
     private mapUserToIUser(user: IUser): IUser {
         return {
             email: user.email,
@@ -12,16 +13,27 @@ export class UserService implements IUserService {
             password: user.password
         };
     }
+
+    private findUserByUsername = async (username: string): Promise<IUser | null> => {
+        try {
+            const user = await User.findOne({ username });
+            return user ? this.mapUserToIUser(user) : null;
+        }
+        catch (err) {
+            console.error(err);
+            return null;
+        }
+    }
+
     public authenticateUser = async (username: string, password: string) => {
-        const user = await this.getUserByUsername(username);
+        const user = await this.findUserByUsername(username);
         if (!user) return false;
         const isValidPassword = await bcrypt.compare(password, user.password);
         return isValidPassword ? true : false;
     }
     public getUserByUsername = async (username: string): Promise<IUser | null> => {
         try {
-           //check if available and return else false
-            const user = await User.findOne({ username });
+            const user = await this.findUserByUsername(username);
             return user ? this.mapUserToIUser(user) : null;
         }
         catch (err) {
@@ -30,11 +42,17 @@ export class UserService implements IUserService {
         }
     };
 
-    public createUser = async (email: string, username: string, password: string): Promise<IUser> => {
+    public createUser = async (email: string, username: string, password: string): Promise<IUser | null > => {
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
-        const user = new User({ email, username, password: hashedPassword });
-        const savedUser = await user.save();
-        return this.mapUserToIUser(savedUser);
+        try {
+            const user = new User({ email, username, password: hashedPassword });
+            const savedUser = await user.save();
+            return this.mapUserToIUser(savedUser);
+        }
+        catch (err) {
+            console.error(err);
+            return null;
+        }
     };
 
     public deleteUser = async (username: string): Promise<void> => {

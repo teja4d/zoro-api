@@ -84,7 +84,7 @@ describe('userService', () => {
 
             const result = await userService.createUser(email, username, password);
             //TODO:Fix the maptoIuser Isuue
-            expect(result.username).toEqual(user.username);
+            expect(result?.username).toEqual(user.username);
             expect(User).toHaveBeenCalledWith({ email, username, password: hashedPassword });
             expect(User.prototype.save).toHaveBeenCalled();
         });
