@@ -16,10 +16,7 @@ export class UserController extends Controller {
     private readonly userService: IUserService;
     constructor({ userService }: UserControllerDependencies = {}) {
         super();
-        if (!userService) {
-            throw new Error('UserController requires userService');
-        }
-        this.userService = userService;
+        this.userService = userService || new UserService();
     }
 
     @Post('login')
