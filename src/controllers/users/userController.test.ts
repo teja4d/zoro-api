@@ -1,8 +1,8 @@
+import { FakeUserService } from '../../services/fakeservices/fakeUserService';
+import { createErrorResponse, createSuccessResponse } from '../../utils/responseUtils';
 import { UserController } from './userController';
-import { createErrorResponse, createSuccessResponse } from '../utils/responseUtils';
-import { FakeUserService } from '../services/fakeservices/fakeUserService';
 
-jest.mock('../utils/responseUtils', () => ({
+jest.mock('../../utils/responseUtils.ts', () => ({
   createSuccessResponse: jest.fn(),
   createErrorResponse: jest.fn(),
 }));
@@ -19,47 +19,6 @@ describe('UserController', () => {
 
     afterEach(() => {
       jest.restoreAllMocks();
-    });
-
-    describe('login', () => {
-      const req = {
-        username: 'testuser',
-        password: 'testpassword',
-      };
-
-      it('should return success response if authentication is successful', async () => {
-        await userService.createUser('test@example.com', req.username, req.password);
-        (createSuccessResponse as jest.Mock).mockReturnValueOnce({
-          message: 'Login successful',
-          token: 'this is a test token',
-        });
-
-        const result = await userController.login(req);
-
-        expect(result).toEqual({
-          message: 'Login successful',
-          token: 'this is a test token',
-        });
-        expect(userController.getStatus()).toBe(200);
-      });
-
-      it('should return unauthorized error response if authentication fails', async () => {
-        (createErrorResponse as jest.Mock).mockReturnValueOnce('Authentication failed');
-
-        const result = await userController.login(req);
-
-        expect(result).toEqual('Authentication failed');
-        expect(userController.getStatus()).toBe(401);
-      });
-
-      it('should return unauthorized error response if username or password is empty', async () => {
-        (createErrorResponse as jest.Mock).mockReturnValueOnce('Unauthorized');
-
-        const result = await userController.login({ username: '', password: '' });
-
-        expect(result).toEqual('Unauthorized');
-        expect(userController.getStatus()).toBe(401);
-      });
     });
 
     describe('register', () => {

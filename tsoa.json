@@ -15,6 +15,6 @@
         ]
     },
     "controllerPathGlobs": [
-        "./src/controllers/*.ts"
+        "./src/controllers/**/*.ts"
     ]
 }

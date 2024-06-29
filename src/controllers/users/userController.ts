@@ -1,11 +1,11 @@
 import { Controller, Post, Route, Response, Body, Get, Path, Inject } from 'tsoa';
-import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../utils/responseUtils';
-import { isEmptyOrNull } from '../helpers/isEmpty';
-import { UserLoginRequest, UserRegisterRequest } from '../models/requests/UserRequests';
-import { UserLoginResponse, UserRegisterResponse } from '../models/responses/UserResponses';
-import { UserDto } from '../models/user/UserDto';
-import { IUserService } from '../models/user/IUserService';
-import { UserService } from '../services/userservices/userService';
+import { createSuccessResponse, createErrorResponse, ApiErrorResponse, ApiSuccessResponse } from '../../utils/responseUtils';
+import { isEmptyOrNull } from '../../helpers/isEmpty';
+import { UserDto } from '../../models/user/UserDto';
+import { IUserService } from '../../models/user/IUserService';
+import { UserService } from '../../services/userservices/userService';
+import { UserRegisterRequest } from '../../models/requests/UserRequests';
+import { UserRegisterResponse } from '../../models/responses/UserResponses';
 
 export interface UserControllerDependencies {
     userService?: IUserService;
@@ -17,28 +17,6 @@ export class UserController extends Controller {
     constructor({ userService }: UserControllerDependencies = {}) {
         super();
         this.userService = userService || new UserService();
-    }
-
-    @Post('login')
-    @Response(200, 'Success')
-    @Response(401, 'Unauthorized')
-    public async login(@Body() req: UserLoginRequest): Promise<ApiErrorResponse | ApiSuccessResponse<UserLoginResponse>> {
-        const { username, password } = req;
-
-        if (!isEmptyOrNull(username, password)) {
-            this.setStatus(401);
-            return createErrorResponse('Unauthorized');
-        }
-        if (await this.userService.authenticateUser(username, password)) {
-            this.setStatus(200);
-            return createSuccessResponse({
-                message: 'Login successful',
-                token: "this is a test token"
-            });
-        } else {
-            this.setStatus(401);
-            return createErrorResponse('Authentication failed');
-        }
     }
 
     @Post('register')

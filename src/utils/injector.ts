@@ -1,4 +1,4 @@
-import { UserControllerDependencies } from "../controllers/userController";
+import { UserControllerDependencies } from "../controllers/users/userController";
 import { IUserService } from "../models/user/IUserService";
 import { UserService } from "../services/userservices/userService";
 export function inject(dependencyName: string): any {
