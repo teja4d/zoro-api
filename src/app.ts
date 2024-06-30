@@ -18,7 +18,6 @@ app.use((req, res, next) => {
     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
     next();
 });
-
 // Swagger
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerJson));
 //swagger.json

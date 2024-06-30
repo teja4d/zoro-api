@@ -1,11 +1,14 @@
-import * as bcrypt from 'bcrypt';
 import { IUserService } from '../../models/user/IUserService';
 import { IUser } from '../../models/user/IUser';
 
 const SALT_ROUNDS = 10;
 
 export class FakeUserService implements IUserService {
-    private users: IUser[] = [];
+    private users: IUser[] = [{
+        email: 'test1@gmail.com',
+        username: 'testusers',
+        password: '123456' // password: testpassword
+    }];
 
     private findUserByUsername(username: string): IUser | undefined {
         return this.users.find(user => user.username === username);
@@ -20,9 +23,10 @@ export class FakeUserService implements IUserService {
     }
 
     public authenticateUser = async (username: string, password: string): Promise<boolean> => {
+        console.log('username', username);
         const user = this.findUserByUsername(username);
         if (!user) return false;
-        const isValidPassword = await bcrypt.compare(password, user.password);
+        const isValidPassword = password === user.password;
         return isValidPassword;
     };
 
@@ -32,7 +36,9 @@ export class FakeUserService implements IUserService {
     };
 
     public createUser = async (email: string, username: string, password: string): Promise<IUser | null> => {
-        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+        //empty users array
+        this.users = [];
+        const hashedPassword = password;//await bcrypt.hash(password, SALT_ROUNDS);
         try {
             const user: IUser = {
                 email,
@@ -56,7 +62,7 @@ export class FakeUserService implements IUserService {
         const user = this.findUserByUsername(username);
         if (!user) return null;
 
-        const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
+        const hashedPassword = password;//await bcrypt.hash(password, SALT_ROUNDS);
         user.password = hashedPassword;
 
         return this.mapUserToIUser(user);
