@@ -5,6 +5,7 @@ import { UserLoginResponse } from "../../models/responses/UserResponses";
 import { ApiErrorResponse, ApiSuccessResponse, createErrorResponse, createSuccessResponse } from "../../utils/responseUtils";
 import { IUserService } from "../../models/user/IUserService";
 import { UserService } from "../../services/userservices/userService";
+import { FakeUserService } from "../../services/fakeservices/fakeUserService";
 
 export interface AuthControllerDependencies {
     userService?: IUserService;
@@ -17,7 +18,6 @@ export class AuthController extends Controller {
         super();
         this.userService = userService || new UserService();
     }
-
 
     @Response(200, 'Success', 'Login successful')
     @Response(401, 'Unauthorized')

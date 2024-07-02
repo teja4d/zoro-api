@@ -42,7 +42,18 @@ export class UserService implements IUserService {
         }
     };
 
-    public createUser = async (email: string, username: string, password: string): Promise<IUser | null > => {
+    public getAllUsers = async (): Promise<IUser[]> => {
+        try {
+            const users = await User.find();
+            return users.map(user => this.mapUserToIUser(user));
+        }
+        catch (err) {
+            console.error(err);
+            return [];
+        }
+    }
+
+    public createUser = async (email: string, username: string, password: string): Promise<IUser | null> => {
         const hashedPassword = await bcrypt.hash(password, SALT_ROUNDS);
         try {
             const user = new User({ email, username, password: hashedPassword });
@@ -56,7 +67,7 @@ export class UserService implements IUserService {
     };
 
     public deleteUser = async (username: string): Promise<void> => {
-        await User
+           await User
             .findOneAndDelete({ username });
     }
 

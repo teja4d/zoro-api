@@ -35,6 +35,10 @@ export class FakeUserService implements IUserService {
         return user ? this.mapUserToIUser(user) : null;
     };
 
+    public getAllUsers = async (): Promise<IUser[]> => {
+        return this.users.map(user => this.mapUserToIUser(user));
+    };
+
     public createUser = async (email: string, username: string, password: string): Promise<IUser | null> => {
         //empty users array
         this.users = [];

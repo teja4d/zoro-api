@@ -66,5 +66,39 @@ export class UserController extends Controller {
         this.setStatus(401);
         return createErrorResponse('User not found');
     }
+
+    @Get('/allUsers/{req}')
+    @Response(200, 'Success')
+    @Response(401, 'Unauthorized')
+    public async allUsers(@Path() req: string): Promise<ApiSuccessResponse<UserDto[]> | ApiErrorResponse> {
+        if (req === 'admin') {
+            const users = await this.userService.getAllUsers();
+            if (users.length > 0) {
+                const usersDto = users.map(user => ({
+                    username: user.username,
+                    email: user.email
+                }));
+                this.setStatus(200);
+                return createSuccessResponse(usersDto);
+            }
+            this.setStatus(401);
+            return createErrorResponse('No users found');
+        }
+        this.setStatus(401);
+        return createErrorResponse('Unauthorized! admin access only');
+    }
+
+    @Post('/delete/{username}')
+    @Response(200, 'Success')
+    @Response(401, 'Unauthorized')
+    public async deleteUser(@Path() username: string): Promise<ApiSuccessResponse | ApiErrorResponse> {
+        if (!isEmptyOrNull(username)) {
+            this.setStatus(401);
+            return createErrorResponse('Please enter a valid username');
+        };
+        await this.userService.deleteUser(username);
+        this.setStatus(200);
+        return createSuccessResponse({ message: 'User deleted successfully' });
+    }
 }
 
